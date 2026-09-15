@@ -4,18 +4,15 @@ import json
 import os
 import sys
 from datetime import datetime
-from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+from shared.student import  VARIANT_NUMBER
+
 sys.path.append(PROJECT_ROOT)
 
 
 def main():
     print()
-
-    print(
-        f"Студент: {STUDENT_NAME} | Група: {GROUP_NAME} | Варіант: {VARIANT_NUMBER}\n"
-    )
+    print("*Завдання 3*\n")
 
     class ValidationError(Exception):
         """Виняток для паролів, що не відповідають мінімальній довжині."""
@@ -64,11 +61,10 @@ def main():
                     try:
                         user_data = create_user(username, password)
                         writer.writerow(user_data)
-                        print(f"[+] Додано: {username}")
-                    except (ValidationError, ValueError) as e:
-                        print(f"[!] Пропущено '{username}': {e}")
+                    except (ValueError, ValidationError) as e:
+                        print(f"{RED}[ERROR] Не вдалося створити користувача {username}: {e}{RESET}")
         except (FileNotFoundError, PermissionError, IOError) as e:
-            print(f"[ERROR] Помилка запису файлу бази даних: {e}")
+            print(f"{RED}[ERROR] Помилка запису файлу бази даних: {e}{RESET}\n")
 
     def log_event(func):
         def wrapper(username, password, *args, **kwargs):
@@ -91,7 +87,7 @@ def main():
                         json.dump(log_entry, log_file, ensure_ascii=False)
                         log_file.write("\n")
                 except (FileNotFoundError, PermissionError, IOError) as e:
-                    print(f"[ERROR] Помилка запису логу: {e}")
+                    print(f"{RED}[ERROR] Помилка запису логу: {e}{RESET}")
 
             return result
 
@@ -100,7 +96,7 @@ def main():
     @log_event
     def login(username: str, password: str) -> bool:
         if not username or not password:
-            raise ValueError("Логін та пароль не можу бути порожніми.")
+            raise ValueError("Логін чи пароль не можуть бути порожніми.")
 
         try:
             user_hash = generate_hash(password, SALT)
@@ -145,20 +141,7 @@ def main():
     except (FileNotFoundError, PermissionError, IOError) as e:
         print(f"[ERROR] Не вдалося прочитати CSV: {e}")
 
-    test_credentials = [
-        ("student", "1234567890123"),
-        ("user", "wrong_password_123"),
-        ("ford3398", "palin1098_secret"),
-        ("justin0987", "horse9845_secure"),
-        ("iman35", "ironman000_hero"),
-        ("oleg", "olegthebest7_pass"),
-        ("operator", "N1cE_operator_key"),
-        ("COMANDER", "fork867_commander"),
-        ("kraken", "sonta867"),
-        ("student", "wrong_password_123"),
-        ("anonymous_guest", "some_password_123"),
-        ("ill1as", ""),
-    ]
+    test_credentials = list(users_to_register) 
 
     print()
 
@@ -166,7 +149,7 @@ def main():
         try:
             status = login(u, p)
             res = f"{GREEN}success{RESET}" if status else f"{RED}failure{RESET}"
-            print(f"Авторизація [{u}]: {res}")
+            print(f"Авторизація [{u}]: {res}\n")
         except (ValueError, ValidationError) as e:
             print(f"[!] Помилка для [{u}]: {e}")
 

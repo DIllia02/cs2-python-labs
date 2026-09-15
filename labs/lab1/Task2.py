@@ -1,10 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-from shared.student import GROUP_NAME, STUDENT_NAME, VARIANT_NUMBER
 def main():
-    print(f"Студент: {STUDENT_NAME} | Група: {GROUP_NAME} | Варіант: {VARIANT_NUMBER}\n")
     print("*Завдання 2*\n")
 
     users = {
