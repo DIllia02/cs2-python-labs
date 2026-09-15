@@ -32,9 +32,10 @@ def main():
 
     forbidden_passwords = {"plain", "member", "regular", "ordinary", "usual", "user"}
 
-    selected_passwords = random.sample(passwords, 3)
+    random_passwords = random.sample(passwords, 3)
+    all_passwords = random_passwords + passwords
 
-    for password in selected_passwords:
+    for password in all_passwords:
         passed_checks = [
             len(password) >= criteria["min_length"],
             (
